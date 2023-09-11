@@ -4,8 +4,12 @@
   "version": "1.0.0",
   "description": "自动浏览",
   "action": {
-    "default_icon": "images/icon32.png",
-    "default_popup": "src/index.html"
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    },
+    "default_popup": "index.html"
   },
   "icons": {
     "16": "images/icon16.png",
@@ -15,13 +19,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
-      "js": ["src/main.js"],
-      "css": ["src/main.css"]
+      "matches": ["https://www.google.com/search*"],
+      "js": ["main.js"],
+      "css": ["main.css"]
     }
   ],
-  "background": {
-    "service_worker": "src/service_worker.js"
-  },
   "permissions": ["tabs", "activeTab", "cookies", "storage"]
 }
