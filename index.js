@@ -17,14 +17,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const keyword = keywordInput.value;
 
     chrome.storage.local.set({ url, keyword });
-    console.log(">>>>>>>>", url);
 
     chrome.tabs.update(
       { url: `https://www.google.com/search?q=${keyword}` },
       function (tab) {
-        chrome.tabs.sendMessage(tab.id, { action: "search", url, keyword });
+        chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+          if (tabId === tab.id && changeInfo.status === "complete") {
+            chrome.tabs.onUpdated.removeListener(listener);
+            chrome.tabs.sendMessage(tab.id, {
+              action: "search",
+              url,
+              keyword,
+              tabId: tab.id,
+            });
+          }
+        });
       }
     );
+
     // chrome.tabs.create(
     //   { url: `https://www.google.com/search?q=${keyword}` },
     //   function (tab) {

@@ -1,4 +1,4 @@
-function findMatchingWebsite(urlToMatch, maxPages) {
+function findMatchingWebsite(urlToMatch, maxPages, tabId) {
   let currentPage = 1;
 
   function searchInCurrentPage() {
@@ -7,9 +7,6 @@ function findMatchingWebsite(urlToMatch, maxPages) {
       const link = result.parentElement.href;
 
       if (link.includes(urlToMatch)) {
-        window.alert(link);
-        // window.location.href = link;
-
         result.parentElement.click();
         return;
       }
@@ -17,7 +14,7 @@ function findMatchingWebsite(urlToMatch, maxPages) {
 
     if (currentPage < maxPages) {
       currentPage++;
-      window.scrollTo(0, document.body.scrollHeight);
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
       setTimeout(searchInCurrentPage, 2000);
     } else {
       console.log("未找到匹配的网站");
@@ -31,6 +28,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.action === "search") {
     const urlToMatch = message.url;
     const maxPages = 5;
-    findMatchingWebsite(urlToMatch, maxPages);
+    const tabId = message.tabId;
+
+    findMatchingWebsite(urlToMatch, maxPages, tabId);
   }
 });

@@ -1,3 +1,4 @@
+// "matches": ["https://www.google.com/search*"],
 // 动态注入
 chrome.scripting
   .registerContentScripts([
